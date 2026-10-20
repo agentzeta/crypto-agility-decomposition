@@ -135,42 +135,22 @@ population estimates are presented here.
 
 Python 3.10+; standard library only. Run from the repository directory:
 
-
+sh
 python3 -I test_agility.py
 
+The tests explicitly add their own directory to the import path so this flat repository works with -I. That flag alone is not proof of isolation. Inspect and test only the intended files in a fresh directory when checking provenance.
 
-The tests explicitly add their own directory to the import path so this flat
-repository works with `-I`. That flag alone is not proof of isolation. Inspect
-and test only the intended files in a fresh directory when checking provenance.
+Assessment is an immutable record. Capability labels describe the same configuration throughout the declared scenario window. If capabilities changed over that period, split the analysis into suitable populations/windows or use a richer model; do not mix today's “no authority” label with earlier successes. Invalid or contradictory inputs raise ValueError at construction.
 
-`Assessment` is an immutable record. Capability labels describe the same
-configuration throughout the declared scenario window. If capabilities changed
-over that period, split the analysis into suitable populations/windows or use a
-richer model; do not mix today's “no authority” label with earlier successes.
-Invalid or contradictory inputs raise `ValueError` at construction.
+Numeric inputs may be int, finite float, or fractions.Fraction; booleans are rejected. A float is interpreted via its shortest decimal string. For exact ratios or very small tails, supply Fraction. Already-rounded input data cannot be recovered. Methods use rational arithmetic without rounding away residuals.
 
-Numeric inputs may be `int`, finite `float`, or `fractions.Fraction`; booleans
-are rejected. A float is interpreted via its shortest decimal string. For exact
-ratios or very small tails, supply `Fraction`. Already-rounded input data cannot
-be recovered. Methods use rational arithmetic without rounding away residuals.
+residual_amount() returns an exact Fraction in the declared units. For object weighting, residual_count() returns an integer only when the computed object equivalents are integral; otherwise it raises. For other weightings it raises because a value/path fraction cannot establish an object count. Even an integral result from assumed inputs is not an observed count.
 
-`residual_amount()` returns an exact `Fraction` in the declared units. For object
-weighting, `residual_count()` returns an integer only when the computed object
-equivalents are integral; otherwise it raises. For other weightings it raises
-because a value/path fraction cannot establish an object count. Even an integral
-result from assumed inputs is not an observed count.
+Value/path weighting requires an explicit total weight_known and weight_unit. Record coverage remains separate from weight coverage, which is not computed. A believed total is a caller assertion, not a completeness certificate; 100% declared record coverage does not prove the real universe was discovered.
 
-Value/path weighting requires an explicit total `weight_known` and `weight_unit`.
-Record coverage remains separate from weight coverage, which is not computed.
-A believed total is a caller assertion, not a completeness certificate; 100%
-declared record coverage does not prove the real universe was discovered.
+report() is JSON-safe: fractions and amounts are ratio strings such as "1/5", "100" or "200/3", and undefined values are None. Parse ratio strings with Fraction if numeric operations are needed. Comparison helpers return Fraction values directly; they are not the JSON report interface.
 
-`report()` is JSON-safe: fractions and amounts are **ratio strings** such as
-`"1/5"`, `"100"` or `"200/3"`, and undefined values are `None`. Parse ratio strings
-with `Fraction` if numeric operations are needed. Comparison helpers return
-`Fraction` values directly; they are not the JSON report interface.
-
-```python
+python
 from agility import Assessment, MechanismSupport
 
 a = Assessment(
@@ -184,54 +164,28 @@ a = Assessment(
 )
 assert a.residual_count() == 100
 assert a.report()["not_transitioned_fraction"] == "1/10000000"
-```
 
-The synthetic tests include explicit success-set complements over finite
-populations and heterogeneous weights, tiny residuals, contradictory inputs,
-outcome partitions and units. They are not empirical “ground truth” about a chain.
+The synthetic tests include explicit success-set complements over finite populations and heterogeneous weights, tiny residuals, contradictory inputs, outcome partitions and units. They are not empirical “ground truth” about a chain.
 
 Three helpers illustrate the arithmetic:
 
-* `authority_effect`: changes availability while holding r and q fixed. An
-  unused independent path does not change the achieved residual.
-* `independent_success_effect`: varies assumed q with availability fixed. Each
-  returned row carries its success assumption.
-* `continuity_effect`: changes primary continuity with r and q fixed. The
-  identity is unchanged; downstream compatibility is not inferred.
+authority_effect: changes availability while holding r and q fixed. An unused independent path does not change the achieved residual.
+independent_success_effect: varies assumed q with availability fixed. Each returned row carries its success assumption.
+continuity_effect: changes primary continuity with r and q fixed. The identity is unchanged; downstream compatibility is not inferred.
 
 These are sensitivities of a definition, not controlled real-world experiments.
 
-### Changes from 0.2.0
+Changes from 0.2.0
 
-Version 0.3.0 intentionally tightens the API: it rejects contradictory successes,
-invalid totals and unsupported types; uses exact rational values; refuses rounded
-or value-derived object counts; distinguishes empty denominators; represents the
-optional disabled/unresolved split; and changes report keys/types accordingly.
-It removes automatic downstream-breakage predictions and corrects the comparison
-helpers. There is no scalar agility score and no additional executable module.
+Version 0.3.0 intentionally tightens the API: it rejects contradictory successes, invalid totals and unsupported types; uses exact rational values; refuses rounded or value-derived object counts; distinguishes empty denominators; represents the optional disabled/unresolved split; and changes report keys/types accordingly. It removes automatic downstream-breakage predictions and corrects the comparison helpers. There is no scalar agility score and no additional executable module.
 
-## Limitations and earlier correction
+Limitations and earlier correction
 
-An earlier draft incorrectly treated mutable references as eliminating holder
-action and mixed authority availability with assumed execution success. That
-claim is withdrawn. Reviewers identified the distinction; regression cases now
-cover it. The revised note makes no universal zero-residual claim.
+An earlier draft incorrectly treated mutable references as eliminating holder action and mixed authority availability with assumed execution success. That claim is withdrawn. Reviewers identified the distinction; regression cases now cover it. The revised note makes no universal zero-residual claim.
 
-This diagnostic does not discover objects, verify evidence, prove completeness,
-enforce policy, recover keys, retire credentials or implement any migration
-mechanism. It does not originate a validated predictive metric. No claim of
-novelty or patent clearance follows from its publication.
+This diagnostic does not discover objects, verify evidence, prove completeness, enforce policy, recover keys, retire credentials or implement any migration mechanism. It does not originate a validated predictive metric. No claim of novelty or patent clearance follows from its publication.
 
-## Licence and citation
+Licence and citation
 
-README.md: [CC BY 4.0][ccby], with attribution and the other applicable terms.
-agility.py, test_agility.py and CITATION.cff: MIT. See `LICENSE`.
-`CITATION.cff` supplies citation metadata; it does not mint a DOI. No DOI is
-claimed for this release candidate.
-
-[nist]: https://csrc.nist.gov/pubs/cswp/39/upd1/considerations-for-achieving-crypto-agility/final
-[near-keys]: https://docs.near.org/protocol/accounts-contracts/access-keys
-[near-actions]: https://docs.near.org/smart-contracts/anatomy/actions
-[nep645]: https://github.com/near/NEPs/blob/master/neps/nep-0645.md
-[bip360]: https://github.com/bitcoin/bips/blob/master/bip-0360.mediawiki
+README.md: CC BY 4.0, with attribution and the other applicable terms. agility.py, test_agility.py and CITATION.cff: MIT. See LICENSE. CITATION.cff supplies citation metadata; it does not mint a DOI. No DOI is claimed for this release candidate./bips/blob/master/bip-0360.mediawiki
 [ccby]: https://creativecommons.org/licenses/by/4.0/
