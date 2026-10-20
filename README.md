@@ -77,7 +77,7 @@ Holding r and q fixed, reference mutability does not appear in this identity.
 That is **not** a causal finding that architecture cannot improve migration:
 mutability may affect achievable success, cost, throughput, timing and risk.
 
-### Three outcomes, with an honest residual label
+### Three outcomes, with a residual label
 
 | Outcome | Meaning |
 |---|---|
@@ -135,9 +135,9 @@ population estimates are presented here.
 
 Python 3.10+; standard library only. Run from the repository directory:
 
-```sh
+
 python3 -I test_agility.py
-```
+
 
 The tests explicitly add their own directory to the import path so this flat
 repository works with `-I`. That flag alone is not proof of isolation. Inspect
