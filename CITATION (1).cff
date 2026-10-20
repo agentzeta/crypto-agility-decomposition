@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "Crypto-agility for legacy objects: support, references, coverage and transition authority"
+message: "Please cite this note and its accompanying diagnostic code. See LICENSE for file-specific terms."
+type: software
+version: "0.3.0"
+authors:
+  - family-names: Khan
+    given-names: Arifa
+abstract: >-
+  A diagnostic framework for migration of existing protected objects. It separates
+  mechanism support, authorization-reference mutability, declared population
+  coverage and transition authority. The accompanying code checks declared inputs
+  and computes the conditional identity R=(1-r)(1-q) using rational arithmetic.
+  R denotes all weight not successfully transitioned, including disabled objects
+  without restored continuity. It is not an empirical measurement, completeness
+  proof or migration mechanism. Primary object continuity alone determines
+  neither authorization nor downstream compatibility.
+keywords:
+  - cryptographic agility
+  - post-quantum migration
+  - key rotation
+  - legacy object migration
+# The optional license field is omitted: CFF 1.2 interprets an array as OR,
+# which would misdescribe these file-specific licenses. See LICENSE instead.
